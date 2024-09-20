@@ -1,0 +1,182 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Xamlify.App"
+             xmlns:local="using:Xamlify"
+             RequestedThemeVariant="Default"
+             xmlns:converters="clr-namespace:Xamlify.Service.UI.Converters">
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+    </Application.Styles>
+    
+    <NativeMenu.Menu>
+        <NativeMenu>
+            <NativeMenuItem Header="About My App" />
+        </NativeMenu>
+    </NativeMenu.Menu>
+
+    <Application.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <ControlTheme x:Key="MyRadioButton" TargetType="RadioButton">
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="Background" Value="#2A2B41" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border
+                            x:Name="border"
+                            CornerRadius="5"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="#3f4054" Opacity="10" />
+                            </Border.BorderBrush>
+                            <Grid>
+                                <TextBlock
+                                    x:Name="tbContent"
+                                    FontSize="14"
+                                    FontWeight="SemiBold"
+                                    FontFamily="Inter"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                    AncestorType={x:Type RadioButton}},Path=Content}"
+                                    Foreground="{TemplateBinding Foreground}" />
+                            </Grid>
+
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Styles>
+                <Style Selector="RadioButton:checked">
+                    <Setter Property="Foreground" Value="#FF2F2F53" />
+                    <Setter Property="Background" Value="#B3B3FE" />
+                    <Setter Property="BorderThickness" Value="3" />
+                </Style>
+            </Styles>
+        </ControlTheme>
+        <ControlTheme x:Key="MyTextBox" TargetType="TextBox">
+            <Setter Property="CaretBrush" Value="White" />
+            <Setter Property="Background" Value="Pink" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="SelectionBrush" Value="#1d4f84" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="ScrollViewer.IsScrollChainingEnabled" Value="True" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                        <DockPanel
+                            Margin="{TemplateBinding Padding}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                            <TextBlock
+                                Name="floatingWatermark"
+                                DockPanel.Dock="Top"
+                                FontSize="{DynamicResource FontSizeSmall}"
+                                Foreground="White"
+                                Text="{TemplateBinding Watermark}">
+                                <TextBlock.IsVisible>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding
+                                            Path="UseFloatingWatermark"
+                                            RelativeSource="{RelativeSource TemplatedParent}" />
+                                        <Binding
+                                            Converter="{x:Static StringConverters.IsNotNullOrEmpty}"
+                                            Path="Text"
+                                            RelativeSource="{RelativeSource TemplatedParent}" />
+                                    </MultiBinding>
+                                </TextBlock.IsVisible>
+                            </TextBlock>
+
+                            <DataValidationErrors>
+
+                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                    <ContentPresenter
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="1"
+                                        Content="{TemplateBinding InnerLeftContent}" />
+                                    <ScrollViewer
+                                        Name="PART_ScrollViewer"
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="1"
+                                        AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
+                                        BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}"
+                                        HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                        IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
+                                        VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                                        <Panel>
+                                            <TextBlock
+                                                Name="watermark"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Opacity="0.5"
+                                                FontSize="14"
+                                                Foreground="White"
+                                                Text="{TemplateBinding Watermark}"
+                                                TextAlignment="{TemplateBinding TextAlignment}"
+                                                TextWrapping="{TemplateBinding TextWrapping}">
+                                                <TextBlock.IsVisible>
+                                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                        <Binding
+                                                            ElementName="PART_TextPresenter" Path="PreeditText"
+                                                            Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                                        <Binding
+                                                            RelativeSource="{RelativeSource TemplatedParent}"
+                                                            Path="Text"
+                                                            Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                                                    </MultiBinding>
+                                                </TextBlock.IsVisible>
+                                            </TextBlock>
+                                            <TextPresenter
+                                                Name="PART_TextPresenter"
+                                                VerticalAlignment="Center"
+                                                CaretBlinkInterval="{TemplateBinding CaretBlinkInterval}"
+                                                CaretBrush="{TemplateBinding CaretBrush}"
+                                                CaretIndex="{TemplateBinding CaretIndex}"
+                                                LineHeight="{TemplateBinding LineHeight}"
+                                                LetterSpacing="{TemplateBinding LetterSpacing}"
+                                                PasswordChar="{TemplateBinding PasswordChar}"
+                                                RevealPassword="{TemplateBinding RevealPassword}"
+                                                SelectionBrush="{TemplateBinding SelectionBrush}"
+                                                SelectionEnd="{TemplateBinding SelectionEnd}"
+                                                SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                                SelectionStart="{TemplateBinding SelectionStart}"
+                                                Text="{TemplateBinding Text,Mode=TwoWay}"
+                                                TextAlignment="{TemplateBinding TextAlignment}"
+                                                TextWrapping="{TemplateBinding TextWrapping}" />
+                                        </Panel>
+                                        <ScrollViewer.Styles>
+                                            <Style Selector="ScrollContentPresenter#PART_ContentPresenter">
+                                                <Setter Property="Cursor" Value="IBeam" />
+                                            </Style>
+                                        </ScrollViewer.Styles>
+                                    </ScrollViewer>
+                                    <ContentPresenter
+                                        Grid.Column="2"
+                                        Grid.ColumnSpan="1"
+                                        Content="{TemplateBinding InnerRightContent}" />
+                                </Grid>
+                            </DataValidationErrors>
+                        </DockPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </ControlTheme>
+    </Application.Resources>
+</Application>
