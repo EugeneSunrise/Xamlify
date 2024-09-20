@@ -17,6 +17,7 @@
         PointerReleased="InputElement_OnPointerReleased"
         PointerMoved="InputElement_OnPointerMoved"
         PointerPressed="InputElement_OnPointerPressed"
+		ExtendClientAreaToDecorationsHint="True"
         Title="Xamlify">
 
     <Design.DataContext>
@@ -87,14 +88,14 @@
             Grid.Row="0"
             Grid.Column="1"
             IsReadOnly="True"
-			Margin="0,0,0,10"
+			Margin="0,40,1,10"
             BorderBrush="Gray"
             Watermark="DROP YOUR SVG THERE"
             Theme="{DynamicResource MyTextBox}"
             Text="{Binding MyText}"
             AcceptsReturn="True"
             Background="Transparent"
-            BorderThickness="1 0 0 1"
+            BorderThickness="1"
             Foreground="White" />
     </Grid>
 </Window>
